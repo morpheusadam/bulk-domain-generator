@@ -10,27 +10,36 @@ def generate_high_quality_domains(seed_words: List[str], count: int = 500) -> Li
     
     # ساختارهای بهینه شده برای دامنه‌های کوتاه و موثر
     structures = [
-        # ساختارهای ساده و کوتاه (2-3 بخشی)
+        # ساختارهای ساده و کوتاه
+        lambda w1, w2: f"{w1}{w2}",
         lambda w1, w2: f"{w1}{w2}",
         lambda w1, w2: f"{w1}{w2}",
         
-        # ساختارهای با پیشوند/پسوند حرفه‌ای
+        # ساختارهای حرفه‌ای
         lambda w1, w2: f"{w1}ly",
         lambda w1, w2: f"{w1}fy",
         lambda w1, w2: f"{w1}io",
-        lambda w1, w2: f"{w1}app",
+        lambda w1, w2: f"{w1}ex",
+        lambda w1, w2: f"{w1}ax",
+        lambda w1, w2: f"{w1}up",
         lambda w1, w2: f"{w1}pro",
+        lambda w1, w2: f"{w1}hub",
+        lambda w1, w2: f"{w1}lab",
+        lambda w1, w2: f"{w1}app",
         lambda w1, w2: f"get{w1}",
         lambda w1, w2: f"try{w1}",
         lambda w1, w2: f"my{w1}",
+        lambda w1, w2: f"max{w1}",
+        lambda w1, w2: f"top{w1}",
+        lambda w1, w2: f"new{w1}",
     ]
     
     # کلمات بسیار کوتاه برای ترکیبات بهینه
-    short_prefixes = ["web", "net", "dig", "app", "pro", "max", "top", "new", "smart", "easy"]
-    short_suffixes = ["ly", "fy", "io", "ex", "ax", "ox", "up", "pro", "hub", "lab"]
+    short_prefixes = ["web", "net", "dig", "app", "pro", "max", "top", "new", "smart", "easy", "fast", "pure"]
+    short_suffixes = ["ly", "fy", "io", "ex", "ax", "ox", "up", "pro", "hub", "lab", "box", "zen"]
     
     # کلمات کلیدی مرتبط با فناوری
-    tech_words = ["tech", "cloud", "data", "ai", "code", "dev", "soft", "cyber", "net", "web"]
+    tech_words = ["tech", "cloud", "data", "ai", "code", "dev", "soft", "cyber", "net", "web", "digi", "byte"]
     
     while len(domains) < count:
         # انتخاب دو کلمه کوتاه برای ترکیب
@@ -51,14 +60,13 @@ def generate_high_quality_domains(seed_words: List[str], count: int = 500) -> Li
             # فیلترهای سختگیرانه برای کیفیت
             if (3 <= len(domain) <= 8 and  # بسیار کوتاه
                 domain.isalpha() and        # فقط حروف
-                not any(c in domain for c in 'aeiou') and  # حروف صدادار کم
                 len(set(domain)) >= 3 and   # تنوع حروف
                 domain not in domains):
                 
                 domains.add(domain)
         
         # ترکیبات ویژه با کلمات فناوری
-        if random.random() < 0.2:
+        if random.random() < 0.3:
             tech_word = random.choice(tech_words)
             short_word = random.choice([w for w in seed_words if len(w) <= 3])
             
@@ -67,6 +75,8 @@ def generate_high_quality_domains(seed_words: List[str], count: int = 500) -> Li
                 f"{short_word}{tech_word}",
                 f"{random.choice(short_prefixes)}{tech_word}",
                 f"{tech_word}{random.choice(short_suffixes)}",
+                f"{random.choice(short_prefixes)}{short_word}",
+                f"{short_word}{random.choice(short_suffixes)}",
             ]
             
             for combo in combinations:
@@ -75,29 +85,27 @@ def generate_high_quality_domains(seed_words: List[str], count: int = 500) -> Li
                     combo not in domains):
                     domains.add(combo)
     
-    # مرتب‌سازی بر اساس طول (کوتاه‌ترین اول)
-    sorted_domains = sorted(list(domains), key=len)
-    return sorted_domains[:count]
+    return list(domains)[:count]
 
 def save_to_csv(domains: List[str], filename: str = "premium_domains.csv"):
     """
-    ذخیره نام دامنه ها در فایل CSV
+    ذخیره نام دامنه ها در فایل CSV (فقط نام دامنه)
     """
     with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Domain Name', 'Length', 'Type'])
+        writer.writerow(['Domain Name'])  # فقط هدر
         for domain in domains:
-            writer.writerow([domain, len(domain), 'Premium'])
+            writer.writerow([domain])
 
 # لیست کلمات بسیار کوتاه و موثر فارسی
 short_persian_words = [
     # کلمات بسیار کوتاه (2-4 حرفی)
-    'ara', 'saz', 'kar', 'fan', 'ray', 'ban', 'sab', 'meh',
-    'rav', 'kav', 'por', 'tiz', 'ram', 'min', 'lav', 'pou',
-    'gol', 'mor', 'dar', 'kuh', 'sta', 'mah', 'bad', 'nar',
-    'yal', 'yas', 'sib', 'ran', 'neg', 'baz', 'for', 'kha',
-    'tej', 'san', 'ser', 'mar', 'mod', 'web', 'net', 'dig',
-    'app', 'pro', 'max', 'top', 'new', 'get', 'try', 'my'
+    'ara', 'saz', 'kar', 'fan', 'ray', 'ban', 'sab', 'meh', 'rav', 'kav',
+    'por', 'tiz', 'ram', 'min', 'lav', 'pou', 'gol', 'mor', 'dar', 'kuh',
+    'sta', 'mah', 'bad', 'nar', 'yal', 'yas', 'sib', 'ran', 'neg', 'baz',
+    'for', 'kha', 'tej', 'san', 'ser', 'mar', 'mod', 'web', 'net', 'dig',
+    'app', 'pro', 'max', 'top', 'new', 'get', 'try', 'my', 'zen', 'box',
+    'ex', 'ax', 'up', 'ly', 'fy', 'io', 'ai', 'tech', 'data', 'cloud'
 ]
 
 # تولید 500 نام دامنه با کیفیت بالا
@@ -112,4 +120,4 @@ print("فایل 'premium_domains.csv' ایجاد شد.")
 # نمایش نمونه‌ای از بهترین دامنه‌ها
 print("\nنمونه‌هایی از بهترین دامنه‌های تولید شده:")
 for i, domain in enumerate(premium_domains[:20]):
-    print(f"{i+1}. {domain}.com (طول: {len(domain)})")
+    print(f"{domain}")
